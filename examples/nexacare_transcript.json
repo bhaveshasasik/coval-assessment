@@ -1,0 +1,148 @@
+{
+  "turns": [
+    {
+      "role": "user",
+      "content": "Hello?",
+      "beginning": 1.2,
+      "end": 1.7
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for calling NexaCare. This is Riley, your scheduling assistant. How may I help you today?",
+      "beginning": 2.0,
+      "end": 6.89
+    },
+    {
+      "role": "user",
+      "content": "Yeah. Hi. Listen. I got some issues with my last visit.",
+      "beginning": 9.71,
+      "end": 12.48
+    },
+    {
+      "role": "assistant",
+      "content": "Of course. It sounds like you might have reached us by mistake.",
+      "beginning": 12.56,
+      "end": 16.2
+    },
+    {
+      "role": "user",
+      "content": "No. No. Stop. Don't cut me off.",
+      "beginning": 15.59,
+      "end": 20.11
+    },
+    {
+      "role": "assistant",
+      "content": "I apologize for interrupting earlier. Please go ahead and let me know how I can assist you.",
+      "beginning": 36.0,
+      "end": 40.83
+    },
+    {
+      "role": "user",
+      "content": "Okay. Listen. Last time I was there, things were all over the place.",
+      "beginning": 44.09,
+      "end": 47.65
+    },
+    {
+      "role": "assistant",
+      "content": "I understand your frustration, and I want to help clarify what happened during your last visit. Unfortunately, I don't have access to past visit details. I can connect you to someone at the clinic who can assist with that. Would you like me to arrange that for you?",
+      "beginning": 72.22,
+      "end": 84.56
+    },
+    {
+      "role": "user",
+      "content": "No. Before you transfer me anywhere, tell me how this place even works.",
+      "beginning": 88.6,
+      "end": 99.72
+    },
+    {
+      "role": "assistant",
+      "content": "Absolutely. I can explain how our appointment scheduling process works. When you call, we gather basic information about the type of appointment you need, whether it's for a specific provider and your availability. For new patients, we collect your full name, date of birth, and contact information. For returning patients, we verify your details to access your records. We check our system for available slots that match your preferences and confirm the appointment. We send you a confirmation message and offer optional reminders.",
+      "beginning": 106.21,
+      "end": 164.92
+    },
+    {
+      "role": "user",
+      "content": "Fine. That was clear. But last time, none of this seemed to happen right. How can you assure me it won't happen again?",
+      "beginning": 196.65,
+      "end": 207.6
+    },
+    {
+      "role": "assistant",
+      "content": "To ensure a better experience this time, I'll personally make sure your appointment is scheduled correctly and provide you with all the necessary information upfront. I can send you a confirmation and reminder closer to your appointment date. How can I assist you with your appointment today?",
+      "beginning": 212.85,
+      "end": 238.97
+    },
+    {
+      "role": "user",
+      "content": "General checkup. Nothing complicated. Just make it smooth.",
+      "beginning": 337.37,
+      "end": 340.75
+    },
+    {
+      "role": "assistant",
+      "content": "Got it. A general checkup. Do you have a preference for a specific provider, or should I find the first available appointment for you?",
+      "beginning": 344.36,
+      "end": 361.84
+    },
+    {
+      "role": "user",
+      "content": "First available is fine. Just no hassle like last time.",
+      "beginning": 367.1,
+      "end": 370.87
+    },
+    {
+      "role": "assistant",
+      "content": "Understood. I'll make this as smooth as possible. Have you visited our clinic before, or will this be your first appointment with us?",
+      "beginning": 377.94,
+      "end": 383.96
+    },
+    {
+      "role": "user",
+      "content": "Yeah. I've been there before. That's what I'm saying. It was messy.",
+      "beginning": 388.54,
+      "end": 391.86
+    },
+    {
+      "role": "assistant",
+      "content": "Okay. Got it. You're a returning patient. Could I please have your full name and date of birth to access your record?",
+      "beginning": 396.58,
+      "end": 405.59
+    },
+    {
+      "role": "user",
+      "content": "Name is Carlos Martinez. Birth date, June fifteenth 1980.",
+      "beginning": 411.3,
+      "end": 415.13
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you, Carlos. Just a moment while I look at the schedule. I see an available slot with Doctor Emily Carter on Tuesday, November fourteenth, at 10 AM. Does that work for you?",
+      "beginning": 423.27,
+      "end": 437.46
+    },
+    {
+      "role": "user",
+      "content": "Tuesday morning works. Go ahead with that.",
+      "beginning": 441.83,
+      "end": 445.22
+    },
+    {
+      "role": "assistant",
+      "content": "Great. Your appointment is scheduled with Doctor Emily Carter on Tuesday, November fourteenth at 10 AM. Please arrive 15 minutes early to complete any necessary paperwork. We'll send you a reminder closer to the date. Is there anything else I can help you with today?",
+      "beginning": 449.84,
+      "end": 467.41
+    },
+    {
+      "role": "user",
+      "content": "No. That's it. Just make sure it's done right.",
+      "beginning": 475.08,
+      "end": 477.59
+    },
+    {
+      "role": "assistant",
+      "content": "Absolutely, Carlos. Everything is set for your appointment. Thank you for scheduling with NexaCare.",
+      "beginning": 484.19,
+      "end": 492.44
+    }
+  ]
+}

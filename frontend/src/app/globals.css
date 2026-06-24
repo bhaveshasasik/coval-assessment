@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Clinical/Compliance Tool Palette - Light Mode */
+    --background: 0 0% 98%;                /* #FAFAFA - clinical white */
+    --foreground: 222 47% 11%;             /* #141824 - slate-deep for primary text */
+
+    --card: 0 0% 100%;                     /* pure white cards */
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 221 83% 53%;                /* #3B82F6 - accent blue for actions */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 214 32% 96%;              /* #F1F5F9 - subtle backgrounds */
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 214 32% 96%;                  /* #F1F5F9 - muted backgrounds */
+    --muted-foreground: 215 16% 47%;       /* #64748B - secondary text */
+
+    --accent: 214 32% 96%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 72% 51%;              /* #DC2626 - fail/error red */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;                 /* #E2E8F0 - cool borders */
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;
+
+    --radius: 0.375rem;                    /* tighter radius for clinical feel */
+
+    /* Semantic status colors for workflow verification */
+    --status-pass: 142 71% 45%;            /* #16A34A - pass green */
+    --status-fail: 0 72% 51%;              /* #DC2626 - fail red */
+    --status-warning: 32 95% 44%;          /* #D97706 - warning amber */
+    --status-partial: 32 95% 44%;          /* #D97706 - partial amber */
+    --status-skipped: 0 72% 51%;           /* #DC2626 - skipped red */
+  }
+
+  .dark {
+    /* Dark Mode - Near-black with subtle surfaces */
+    --background: 222 47% 7%;              /* #0D1117 - near-black base */
+    --foreground: 210 40% 98%;             /* #F8FAFC - light text */
+
+    --card: 222 47% 9%;                    /* #111827 - elevated surface */
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217 91% 60%;                /* #3B82F6 - brighter blue for dark */
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 217 33% 15%;              /* #1E293B - subtle dark surface */
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 15%;                  /* #1E293B - muted dark */
+    --muted-foreground: 215 20% 65%;       /* #94A3B8 - secondary text */
+
+    --accent: 217 33% 15%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 45%;              /* #B91C1C - darker red for dark mode */
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 17%;                 /* #1E293B - subtle borders */
+    --input: 217 33% 17%;
+    --ring: 224 76% 48%;
+
+    /* Dark mode status colors - slightly muted */
+    --status-pass: 142 71% 45%;
+    --status-fail: 0 63% 45%;
+    --status-warning: 32 95% 44%;
+    --status-partial: 32 95% 44%;
+    --status-skipped: 0 63% 45%;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+* {
+  border-color: hsl(var(--border));
+}

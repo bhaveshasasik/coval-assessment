@@ -1,0 +1,56 @@
+{
+  "edges": [
+    {"id": "e1-2", "source": "1", "target": "2"},
+    {"id": "e2-3", "source": "2", "target": "3"},
+    {"id": "e3-4", "source": "3", "target": "4"},
+    {"id": "e3-5", "source": "3", "target": "5"},
+    {"id": "e4-5", "source": "4", "target": "5"}
+  ],
+  "nodes": [
+    {
+      "id": "1",
+      "data": {
+        "label": "Introduction",
+        "description": "Thank you for calling NexaCare. This is Riley, your scheduling assistant. How may I help you today?"
+      },
+      "type": "start",
+      "position": {"x": 250, "y": 25}
+    },
+    {
+      "id": "2",
+      "data": {
+        "label": "Appointment Type Determination",
+        "description": "Identify type of appointment, provider preference, if the patient is new or returning, urgency of issue."
+      },
+      "type": "decision",
+      "position": {"x": 250, "y": 125}
+    },
+    {
+      "id": "3",
+      "data": {
+        "label": "Scheduling Process",
+        "description": "For new patients: Ask for full name, date of birth, and contact number. For returning patients: Full name and DOB to access record. Offer and confirm appointment times and provide preparation instructions."
+      },
+      "type": "process",
+      "position": {"x": 250, "y": 225}
+    },
+    {
+      "id": "4",
+      "data": {
+        "label": "Error Handling",
+        "description": "If unclear input: 'I'm sorry, I didn't catch that. Could you please repeat?' Technical difficulties: 'I'm experiencing a brief delay. Bear with me.' No suitable times: 'Would you be open to seeing a different provider?'"
+      },
+      "type": "process",
+      "position": {"x": 250, "y": 325}
+    },
+    {
+      "id": "5",
+      "data": {
+        "label": "Confirmation and Wrap-up",
+        "description": "Summarize details, offer optional reminders. Close: 'Thank you for scheduling with NexaCare. Is there anything else I can help with today?'"
+      },
+      "type": "end",
+      "position": {"x": 250, "y": 425}
+    }
+  ]
+}

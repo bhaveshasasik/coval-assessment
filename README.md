@@ -1,239 +1,112 @@
 # Workflow Verification System
 
-> A system that evaluates whether conversational AI agents correctly follow defined workflows during conversations.
+> A deterministic compliance verification system that evaluates whether conversational AI agents correctly follow defined workflows.
 
-**Built with:** FastAPI + LangGraph + Anthropic Claude (backend) | Next.js + TypeScript (frontend)
+**Tech Stack:** FastAPI + Anthropic Claude (backend) | Next.js + TypeScript (frontend)
 
----
-
-## 📋 Quick Overview
-
-**Input:**
-1. Workflow Graph (JSON) - defines expected conversation flow
-2. Conversation Transcript (JSON) - timestamped user/assistant dialogue
-
-**Output:**
-- Overall compliance score (0-1)
-- Node-level results (visited, skipped, partial, etc.)
-- Multi-dimensional metrics (coverage, sequence, semantic, efficiency)
-- Skip rate & response latency analytics
-- Human-readable summary
-
-**Use Cases:** AI agent QA, call center compliance, healthcare protocols, customer service monitoring
-
----
+**Architecture:** See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for system diagram and data flow.
 
 ## 🚀 Quick Start
 
 ```bash
-# 1. Setup
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+# One-command startup (both backend + frontend)
+./start.sh
 
-# 2. Configure (add your Anthropic API key)
-cp .env.example .env
-# Edit .env: ANTHROPIC_API_KEY=sk-ant-your-key-here
+# Access: http://localhost:3000
+# API Docs: http://localhost:8000/docs
 
-# 3. Run
-uvicorn src.main:app --reload
-
-# 4. Test
-open http://localhost:8000/docs
+# To stop all services:
+./stop.sh
 ```
 
-**Full instructions:** [Setup Guide](docs/SETUP.md)
+**Full setup instructions:** See [docs/SETUP.md](docs/SETUP.md) for detailed guide including troubleshooting.
 
 ---
 
-## 📚 Documentation
+## Approach
 
-### Getting Started
-- **[Setup & Installation](docs/SETUP.md)** - Installation, configuration, running the app
-- **[Testing Guide](docs/TESTING.md)** - Test with example data, validation checks
+**Problem:** Given a workflow graph (expected flow) and conversation transcript (actual conversation), determine if the agent correctly followed the workflow with a PASS/FAIL verdict.
 
-### Core Concepts
-- **[Key Features](docs/FEATURES.md)** - Semantic matching, multi-dimensional scoring, streaming
-- **[Architecture](docs/ARCHITECTURE.md)** - System design, components, data flow
-- **[Design Decisions](docs/DESIGN_DECISIONS.md)** - Why we made key choices
+**Solution:** 9-stage hybrid pipeline combining:
+- **LLM-powered evidence extraction** - for semantic understanding
+- **Quote verification firewall** - to eliminate hallucinations  
+- **Deterministic rule engine** - for unbiased pass/fail decisions
 
-### API & Integration
-- **[API Documentation](docs/API.md)** - Endpoint specs, request/response formats
-- **[Use Cases](docs/USE_CASES.md)** - Real-world applications and code examples
-
-### Development
-- **[Developer Guide](docs/DEVELOPER_GUIDE.md)** - Adding features, testing, debugging
-- **[Tech Stack](docs/TECH_STACK.md)** - Technologies used and why
-- **[Roadmap](docs/ROADMAP.md)** - Current status and future plans
+**Why hybrid?** Pure LLM is unreliable (hallucinations), pure string matching is inflexible (misses semantic equivalence). Our approach: LLM understands meaning → quotes verified against transcript → deterministic rules decide verdict.
 
 ---
 
-## 🎯 Core Features
+## Key Design Decisions
 
-✅ **Semantic Matching** - LLM-powered analysis with confidence scores  
-✅ **Multi-Dimensional Scoring** - Coverage, sequence, semantic quality, efficiency  
-✅ **Real-Time Streaming** - Server-Sent Events for live progress  
-✅ **Persistent Storage** - SQLite for verification history  
-✅ **Detailed Analytics** - Node-level results with timestamps & latency
+### 1. **Mapping Conversation to Nodes**
 
-**Learn more:** [Features Documentation](docs/FEATURES.md)
+**Decision:** LLM extracts sub-requirements + quotes → Verify quotes verbatim → Rules evaluate
 
----
+**Reasoning:**
+- Break vague descriptions ("Collect patient info") into atomic requirements (Name, DOB, Phone)
+- LLM extracts evidence with exact quotes from transcript
+- 3-check verification: quote exists, correct speaker, timestamp match (±1s)
+- Deterministic rules: node satisfied only if ALL sub-requirements have verified quotes
 
-## 📊 Example Output
-
-```json
-{
-  "overall_score": 0.82,
-  "skip_rate": 0.0,
-  "avg_response_latency": 2.35,
-  "node_results": [
-    {
-      "node_id": "1",
-      "status": "visited",
-      "confidence": 0.95,
-      "response_latency": 0.8
-    }
-  ],
-  "metadata": {
-    "correct_edges": 4,
-    "total_transitions": 5,
-    "invalid_transitions": ["3->5"]
-  }
-}
+**Example:**
+```
+Node: "Collect name and DOB"
+✓ "Your full name?" - VERIFIED at t=396.58
+✓ "Date of birth?" - VERIFIED at t=402.12
+→ Node SATISFIED
 ```
 
----
+### 2. **Defining "Correct" Traversal**
 
-## 🏗️ Project Structure
+**Decision:** Valid path matching + edge validation + order enforcement
 
+**Criteria:**
+1. Execution sequence matches at least one valid path through graph
+2. Every transition A→B exists in workflow edges
+3. Prerequisites completed before dependent nodes
+4. START and all END nodes satisfied
+
+**Why not simpler?** Just visiting all nodes allows random jumping. Just following edges allows wrong order.
+
+### 3. **Handling Edge Cases**
+
+| Case | Approach | Severity |
+|------|----------|----------|
+| **Skipped Node** | V-01 violation, immediate FAIL | Critical |
+| **Invalid Edge** | V-02 violation, immediate FAIL | Critical |
+| **Partial Completion** | Node NOT satisfied if any sub-requirement missing | Critical |
+| **Repeated Node** | Take first occurrence, ignore repeats | None |
+| **Interruptions** | V-06 violation, track duration | Minor |
+
+**Interruption example:**
 ```
-coval_assessment/
-├── src/                    # Backend (FastAPI)
-│   ├── models/            # Pydantic schemas
-│   ├── services/          # Business logic
-│   ├── api/               # API routes
-│   ├── db/                # SQLite database
-│   └── main.py            # FastAPI app
-├── frontend/               # Next.js (in progress)
-├── examples/               # Sample data
-├── docs/                   # Documentation
-└── README.md               # This file
-```
-
-**Details:** [Architecture Documentation](docs/ARCHITECTURE.md)
-
----
-
-## 🔍 API Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/health` | GET | Health check |
-| `/api/verify` | POST | Batch verification |
-| `/api/verify/stream` | POST | Streaming verification (SSE) |
-| `/api/verify/{id}` | GET | Get past verification |
-| `/api/verify/recent` | GET | List recent verifications |
-
-**Interactive docs:** http://localhost:8000/docs  
-**Full specs:** [API Documentation](docs/API.md)
-
----
-
-## 🧪 Testing
-
-```bash
-# Start backend
-uvicorn src.main:app --reload
-
-# Option 1: Swagger UI (easiest)
-open http://localhost:8000/docs
-
-# Option 2: cURL
-curl -X POST http://localhost:8000/api/verify \
-  -H "Content-Type: application/json" \
-  -d @examples/test_request.json
-
-# Option 3: Python
-python scripts/test_verification.py
+AGENT: "Thank you for—"
+PATIENT: "Stop, I need to reschedule"
+→ Node 1 still satisfied (agent recovered)
+→ V-06 minor violation logged
 ```
 
-**Full guide:** [Testing Documentation](docs/TESTING.md)
+### 4. **Metrics Design**
+
+**Decision:** 8 metrics + binary verdict
+
+| Metric | Purpose |
+|--------|---------|
+| Node Completion Rate | Coverage (satisfied / total) |
+| Critical Node Pass | START + END satisfied? |
+| Edge Accuracy | Valid transitions / total |
+| Valid Path Matched | Sequence matches valid path? |
+| Order Violation | Dependencies broken? |
+| First Deviation Point | When did failure occur? |
+| Sub-Requirement Coverage | Granular completeness |
+| Low Confidence Count | Needs human review? |
+
+**Binary Verdict:** `PASS = zero critical violations` | `FAIL = any critical violation`
+
+**Why binary?** Compliance use cases need clear pass/fail, not scores.
 
 ---
-
-## 💡 Use Cases
-
-- **AI Agent QA** - Monitor production performance
-- **Call Center Compliance** - Healthcare/financial protocols
-- **Agent Training** - Identify knowledge gaps
-- **A/B Testing** - Compare agent versions
-- **Performance Monitoring** - Track response times
-
-**Real examples:** [Use Cases Documentation](docs/USE_CASES.md)
-
----
-
-## 🛠️ Tech Stack
-
-**Backend:** FastAPI, LangGraph, Anthropic Claude, SQLite, Pydantic  
-**Frontend:** Next.js 15, TypeScript, TailwindCSS, ReactFlow (planned)
-
-**Details:** [Tech Stack Documentation](docs/TECH_STACK.md)
-
----
-
-## 🚧 Current Status
-
-### ✅ Complete (MVP)
-- Backend API with semantic matching
-- Multi-dimensional scoring
-- SQLite persistence & SSE streaming
-- Comprehensive documentation
-
-### 🔨 In Progress
-- Frontend UI (Next.js basic setup)
-- Graph visualization
-- Interactive transcript viewer
-
-### 📋 Planned
-- Multi-conversation analytics
-- Unit & integration tests
-- Workflow optimization recommendations
-
-**Full roadmap:** [Roadmap Documentation](docs/ROADMAP.md)
-
----
-
-## 🎓 For Developers
-
-- **Adding a new metric?** See [Developer Guide](docs/DEVELOPER_GUIDE.md#1-adding-a-new-metric)
-- **Custom LLM integration?** See [Developer Guide](docs/DEVELOPER_GUIDE.md#3-custom-llm-integration)
-- **New API endpoint?** See [Developer Guide](docs/DEVELOPER_GUIDE.md#4-adding-api-endpoints)
-
----
-
-## 📞 Quick Links
-
-- **Documentation:** [docs/](docs/)
-- **API Docs (Interactive):** http://localhost:8000/docs
-- **Examples:** [examples/](examples/)
-- **Setup Guide:** [docs/SETUP.md](docs/SETUP.md)
-
----
-
-## 👤 About
 
 **Created by:** Bhavesha  
-**For:** Workflow Verification Take-Home Assignment  
-**Version:** 1.0.0 (MVP)  
-**Last Updated:** June 23, 2026
-
----
-
-## 🙏 Acknowledgments
-
-- **Anthropic** - Claude API for semantic matching
-- **FastAPI** - Modern Python web framework
-- **Next.js** - React framework
-- **LangChain/LangGraph** - LLM orchestration
+**Version:** 1.0.0  
+**Date:** June 24, 2026

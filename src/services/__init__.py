@@ -9,6 +9,7 @@ from .quote_verifier import QuoteVerifier
 from .rule_engine import RuleEngine
 from .edge_validator import EdgeValidator
 from .compliance_verifier import ComplianceVerifier
+from .metrics_export import MetricsExportService
 
 __all__ = [
     "LLMService",
@@ -20,4 +21,5 @@ __all__ = [
     "RuleEngine",
     "EdgeValidator",
     "ComplianceVerifier",
+    "MetricsExportService",
 ]

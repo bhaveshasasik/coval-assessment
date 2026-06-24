@@ -281,3 +281,42 @@ async def get_verification_result(verification_id: str):
     if result is None:
         raise HTTPException(status_code=404, detail="Verification not found")
     return result
+
+
+@router.get("/verify/{verification_id}/metrics")
+async def get_verification_metrics(verification_id: str):
+    """
+    Retrieve formatted metrics JSON for a verification result.
+
+    Args:
+        verification_id: The verification ID
+
+    Returns:
+        Formatted metrics JSON matching the export format
+    """
+    from ..services import MetricsExportService
+    from ..models import ComplianceResult, WorkflowGraph, Transcript
+
+    result = await get_verification(verification_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Verification not found")
+
+    # Check if metrics_json exists (new verifications)
+    metrics_json = result.get("metrics_json")
+
+    if metrics_json:
+        return metrics_json
+
+    # For old verifications, generate metrics on-the-fly
+    try:
+        verification = ComplianceResult.model_validate(result["results"])
+        workflow = WorkflowGraph.model_validate(result["workflow"])
+        transcript = Transcript.model_validate(result["transcript"])
+
+        metrics_service = MetricsExportService()
+        return metrics_service.export_metrics(verification, workflow, transcript)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to generate metrics: {str(e)}"
+        )

@@ -7,6 +7,7 @@ import aiosqlite
 from typing import List, Optional
 from .database import get_db_connection
 from ..models import ComplianceResult, WorkflowGraph, Transcript
+from ..services import MetricsExportService
 
 
 async def save_verification(
@@ -27,6 +28,12 @@ async def save_verification(
         v for v in verification.violations if v.severity == "critical"
     ]
 
+    # Generate formatted metrics JSON
+    metrics_export_service = MetricsExportService()
+    metrics_json = metrics_export_service.export_metrics(
+        verification, workflow, transcript
+    )
+
     async with await get_db_connection() as db:
         await db.execute(
             """
@@ -40,8 +47,8 @@ async def save_verification(
                 critical_violation_count, total_violation_count,
                 actual_sequence, required_sequence,
                 summary,
-                workflow_json, transcript_json, results_json
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                workflow_json, transcript_json, results_json, metrics_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
             (
                 verification.id,
@@ -64,6 +71,7 @@ async def save_verification(
                 workflow.model_dump_json(),
                 transcript.model_dump_json(),
                 verification.model_dump_json(),
+                json.dumps(metrics_json),
             ),
         )
         await db.commit()
@@ -120,6 +128,9 @@ async def get_verification(verification_id: str) -> Optional[dict]:
             "workflow": json.loads(row["workflow_json"]),
             "transcript": json.loads(row["transcript_json"]),
             "results": json.loads(row["results_json"]),
+            "metrics_json": json.loads(row["metrics_json"])
+            if row["metrics_json"]
+            else None,
         }
 
 

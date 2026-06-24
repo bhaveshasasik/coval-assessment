@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { HistoryItem } from "@/types";
+import { HistoryItem, MetricsExport } from "@/types";
 import { History, RefreshCw, Eye, Loader2 } from "lucide-react";
-import { getRecentVerifications } from "@/lib/api";
+import { getRecentVerifications, getVerificationMetrics } from "@/lib/api";
+import JSONViewerDialog from "@/components/json-viewer-dialog";
 
 interface HistoryTableProps {
   onLoadVerification: (id: string) => void;
@@ -15,6 +16,9 @@ export default function HistoryTable({ onLoadVerification }: HistoryTableProps) 
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedMetrics, setSelectedMetrics] = useState<MetricsExport | null>(null);
+  const [loadingMetrics, setLoadingMetrics] = useState(false);
 
   const fetchHistory = async () => {
     setIsLoading(true);
@@ -65,6 +69,23 @@ export default function HistoryTable({ onLoadVerification }: HistoryTableProps) 
     return verdict === "PASS"
       ? "text-green-600 bg-green-50 dark:text-green-400 dark:bg-green-950/30"
       : "text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-950/30";
+  };
+
+  const handleViewMetrics = async (id: string) => {
+    setLoadingMetrics(true);
+    setDialogOpen(true);
+    setSelectedMetrics(null);
+
+    try {
+      const metrics = await getVerificationMetrics(id);
+      setSelectedMetrics(metrics);
+    } catch (err) {
+      console.error("Failed to load metrics:", err);
+      setError(err instanceof Error ? err.message : "Failed to load metrics");
+      setDialogOpen(false);
+    } finally {
+      setLoadingMetrics(false);
+    }
   };
 
   return (
@@ -162,7 +183,7 @@ export default function HistoryTable({ onLoadVerification }: HistoryTableProps) 
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => onLoadVerification(item.id)}
+                        onClick={() => handleViewMetrics(item.id)}
                       >
                         <Eye className="w-4 h-4" />
                         View
@@ -174,6 +195,13 @@ export default function HistoryTable({ onLoadVerification }: HistoryTableProps) 
             </table>
           </div>
         )}
+
+        <JSONViewerDialog
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          data={selectedMetrics}
+          isLoading={loadingMetrics}
+        />
       </CardContent>
     </Card>
   );

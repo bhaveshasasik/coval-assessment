@@ -34,7 +34,8 @@ async def init_db():
                 summary TEXT,
                 workflow_json TEXT,
                 transcript_json TEXT,
-                results_json TEXT
+                results_json TEXT,
+                metrics_json TEXT
             )
         """)
         await db.commit()

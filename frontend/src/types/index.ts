@@ -114,3 +114,39 @@ export interface DatabaseVerification {
   transcript: Transcript;
   results: VerificationResult;
 }
+
+export interface MetricsExport {
+  conversation_id: string;
+  workflow_id: string;
+  verified_at: string;
+  result: 'PASS' | 'FAIL';
+  violations: Array<{
+    code: string;
+    severity: string;
+    description: string;
+    node_id?: string;
+    edge?: string;
+    timestamp?: number;
+  }>;
+  metrics: {
+    node_completion_rate: number;
+    critical_node_pass: boolean;
+    edge_accuracy: number;
+    valid_path_matched: boolean;
+    order_violation: boolean;
+    first_deviation_point?: number;
+    sub_requirement_coverage?: number;
+    low_confidence_count: number;
+    unauthorized_steps: number;
+  };
+  steps_taken: string[];
+  steps_required: string[];
+  human_review_required: boolean;
+  node_results: Array<{
+    node_id: string;
+    label: string;
+    status: 'visited' | 'out_of_order' | 'not_visited';
+    evidence_quote?: string | null;
+    verified_at?: number | null;
+  }>;
+}

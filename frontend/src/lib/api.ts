@@ -2,7 +2,8 @@ import type {
   VerificationRequest,
   VerificationResponse,
   DatabaseVerification,
-  HistoryItem
+  HistoryItem,
+  MetricsExport
 } from "@/types";
 
 // Use relative URLs to go through Next.js API routes (proxy)
@@ -61,6 +62,21 @@ export async function getRecentVerifications(): Promise<HistoryItem[]> {
     throw new APIError(
       response.status,
       "Failed to load verification history"
+    );
+  }
+
+  return response.json();
+}
+
+export async function getVerificationMetrics(
+  verificationId: string
+): Promise<MetricsExport> {
+  const response = await fetch(`${BASE_URL}/api/verify/${verificationId}/metrics`);
+
+  if (!response.ok) {
+    throw new APIError(
+      response.status,
+      "Failed to load verification metrics"
     );
   }
 

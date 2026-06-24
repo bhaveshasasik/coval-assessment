@@ -105,6 +105,20 @@ PATIENT: "Stop, I need to reschedule"
 
 **Why binary?** Compliance use cases need clear pass/fail, not scores.
 
+### 5. **Output Structure**
+
+**Decision:** Structured JSON with verdict, violations, metrics, and node-level evidence
+
+**Format:** See [docs/example_output.json](docs/example_output.json)
+
+**Key fields:**
+- `result`: "PASS" | "FAIL"
+- `violations[]`: Code (V-01 to V-06), severity, description, timestamp
+- `metrics{}`: All 8 metrics from above
+- `node_results[]`: Status, evidence quote, verification timestamp per node
+
+**Why?** Enables CI/CD gates, audit trails, and human review workflows.
+
 ---
 
 **Created by:** Bhavesha  

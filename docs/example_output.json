@@ -1,0 +1,87 @@
+{
+  "conversation_id": "28b97af8-464a-42ce-a6e9-161c59db56f7",
+  "workflow_id": "nexacare_workflow",
+  "verified_at": "2026-06-24T23:13:16.805555+00:00",
+  "result": "FAIL",
+  "violations": [
+    {
+      "code": "V-02",
+      "severity": "critical",
+      "description": "Invalid transition: 2 -> 5",
+      "edge": "2->5",
+      "timestamp": 449.84
+    },
+    {
+      "code": "V-01",
+      "severity": "critical",
+      "description": "Required node not found: 3",
+      "node_id": "3"
+    },
+    {
+      "code": "V-06",
+      "severity": "minor",
+      "description": "Unauthorized step detected: 226.4s of unverified agent dialogue",
+      "timestamp": 12.56
+    }
+  ],
+  "metrics": {
+    "node_completion_rate": 0.6,
+    "critical_node_pass": true,
+    "edge_accuracy": 0.5,
+    "valid_path_matched": false,
+    "order_violation": false,
+    "first_deviation_point": 449.84,
+    "low_confidence_count": 0,
+    "unauthorized_steps": 1
+  },
+  "steps_taken": [
+    "1",
+    "2",
+    "5"
+  ],
+  "steps_required": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5"
+  ],
+  "human_review_required": false,
+  "node_results": [
+    {
+      "node_id": "1",
+      "label": "Introduction",
+      "status": "visited",
+      "evidence_quote": "Thank you for calling NexaCare.",
+      "verified_at": 2
+    },
+    {
+      "node_id": "2",
+      "label": "Appointment Type Determination",
+      "status": "visited",
+      "evidence_quote": "Got it. A general checkup. Do you have a preference for a specific provider, or should I find the first available appointment for you?",
+      "verified_at": 344.36
+    },
+    {
+      "node_id": "3",
+      "label": "Scheduling Process",
+      "status": "not_visited",
+      "evidence_quote": null,
+      "verified_at": null
+    },
+    {
+      "node_id": "4",
+      "label": "Error Handling",
+      "status": "not_visited",
+      "evidence_quote": null,
+      "verified_at": null
+    },
+    {
+      "node_id": "5",
+      "label": "Confirmation and Wrap-up",
+      "status": "visited",
+      "evidence_quote": "Great. Your appointment is scheduled with Doctor Emily Carter on Tuesday, November fourteenth at 10 AM. Please arrive 15 minutes early to complete any necessary paperwork.",
+      "verified_at": 449.84
+    }
+  ]
+}

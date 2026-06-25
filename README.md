@@ -7,9 +7,9 @@
 ## 🚀 Quick Start
 
 ```bash
-# Edit .env file (already exists)
-# Add your Anthropic API key
-ANTHROPIC_API_KEY=sk-ant-your-key-here
+# Copy environment template and add your API key
+cp .env.example .env
+# Edit .env and set: ANTHROPIC_API_KEY=sk-ant-your-key-here
 
 # One-command startup (both backend + frontend)
 ./start.sh

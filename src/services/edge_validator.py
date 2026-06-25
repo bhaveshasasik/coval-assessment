@@ -10,7 +10,7 @@ from .node_classifier import NodeClassifier, NodeBehavior
 
 class EdgeValidator:
     """
-    Validate edge traversal and path matching per logic.md Stage 7.
+    Validate edge traversal and path matching.
     """
 
     def __init__(self):

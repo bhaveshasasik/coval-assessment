@@ -1,7 +1,7 @@
 """
 LLM service for compliance evidence extraction using Anthropic Claude.
 
-Stage 4 Evidence Extraction (logic.md) - Extracts evidence from transcript batches
+Stage 4 Evidence Extraction - Extracts evidence from transcript batches
 to verify workflow compliance.
 """
 

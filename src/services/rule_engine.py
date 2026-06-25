@@ -15,7 +15,7 @@ from ..models.evidence import (
 
 class RuleEngine:
     """
-    Deterministic node evaluation per logic.md Stage 6.
+    Deterministic node evaluation per Stage 6.
 
     The LLM's node_satisfied opinion is NEVER used.
     All verdicts are recomputed from verified evidence only.

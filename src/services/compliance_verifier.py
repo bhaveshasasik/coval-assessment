@@ -21,7 +21,7 @@ from .llm_service import LLMService
 
 class ComplianceVerifier:
     """
-    Main orchestrator for logic.md 9-stage compliance verification.
+    Main orchestrator forcompliance verification.
 
     Stages:
     1. Graph validation & path finding (done in workflow model)
@@ -49,7 +49,7 @@ class ComplianceVerifier:
         workflow_name: str | None = None,
     ) -> ComplianceResult:
         """
-        Run complete compliance verification per logic.md.
+        Run complete compliance verification.
 
         Args:
             workflow: The workflow graph to verify against

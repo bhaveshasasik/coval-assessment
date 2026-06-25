@@ -30,14 +30,21 @@ if ! grep -q "ANTHROPIC_API_KEY=sk-" .env 2>/dev/null; then
     echo -e "Please add your API key to .env file\n"
 fi
 
-# Check if virtual environment exists
+# Check if virtual environment exists, create if needed
 if [ ! -d ".venv" ]; then
-    echo -e "${RED}❌ Error: Virtual environment not found${NC}"
-    echo -e "${YELLOW}Please run setup first:${NC}"
-    echo -e "  ${BLUE}python3 -m venv .venv${NC}"
-    echo -e "  ${BLUE}source .venv/bin/activate${NC}"
-    echo -e "  ${BLUE}pip install -r requirements.txt${NC}"
-    exit 1
+    echo -e "${YELLOW}⚠️  Virtual environment not found. Creating...${NC}"
+    python3 -m venv .venv
+    echo -e "${GREEN}✓ Virtual environment created${NC}\n"
+fi
+
+# Activate and install/update dependencies
+source .venv/bin/activate
+if [ ! -f ".venv/.dependencies_installed" ]; then
+    echo -e "${YELLOW}⚠️  Installing backend dependencies...${NC}"
+    pip install -q --upgrade pip
+    pip install -q -r requirements.txt
+    touch .venv/.dependencies_installed
+    echo -e "${GREEN}✓ Backend dependencies installed${NC}\n"
 fi
 
 # Check if frontend node_modules exists

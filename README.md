@@ -32,6 +32,12 @@ cp .env.example .env
 ./stop.sh
 ```
 
+## Usage
+
+Upload workflow + transcript files at [http://localhost:3000](http://localhost:3000) → Run Verification → View results
+
+**Sample Files:** [Workflow](examples/nexacare_workflow.json) | [Transcript](examples/nexacare_transcript.json)
+
 **Full setup instructions:** See [docs/SETUP.md](docs/SETUP.md) for detailed guide including troubleshooting.
 
 **Architecture:** See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for system diagram and data flow.

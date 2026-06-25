@@ -4,11 +4,13 @@
 
 **Tech Stack:** FastAPI + Anthropic Claude (backend) | Next.js + TypeScript (frontend)
 
-**Architecture:** See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for system diagram and data flow.
-
 ## 🚀 Quick Start
 
 ```bash
+# Edit .env file (already exists)
+# Add your Anthropic API key
+ANTHROPIC_API_KEY=sk-ant-your-key-here
+
 # One-command startup (both backend + frontend)
 ./start.sh
 
@@ -20,6 +22,9 @@
 ```
 
 **Full setup instructions:** See [docs/SETUP.md](docs/SETUP.md) for detailed guide including troubleshooting.
+
+**Architecture:** See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for system diagram and data flow.
+
 
 ---
 

@@ -30,6 +30,23 @@ if ! grep -q "ANTHROPIC_API_KEY=sk-" .env 2>/dev/null; then
     echo -e "Please add your API key to .env file\n"
 fi
 
+# Check Node.js version
+REQUIRED_NODE_VERSION="18.18.0"
+if command -v node &> /dev/null; then
+    NODE_VERSION=$(node --version | sed 's/v//')
+    if [ "$(printf '%s\n' "$REQUIRED_NODE_VERSION" "$NODE_VERSION" | sort -V | head -n1)" != "$REQUIRED_NODE_VERSION" ]; then
+        echo -e "${RED}❌ Error: Node.js version $REQUIRED_NODE_VERSION or higher required${NC}"
+        echo -e "${YELLOW}Current version: v$NODE_VERSION${NC}"
+        echo -e "${YELLOW}Install Node.js from: https://nodejs.org/${NC}"
+        echo -e "${YELLOW}Or use nvm: nvm install 18.18.0${NC}"
+        exit 1
+    fi
+else
+    echo -e "${RED}❌ Error: Node.js is not installed${NC}"
+    echo -e "${YELLOW}Install from: https://nodejs.org/${NC}"
+    exit 1
+fi
+
 # Check if virtual environment exists, create if needed
 if [ ! -d ".venv" ]; then
     echo -e "${YELLOW}⚠️  Virtual environment not found. Creating...${NC}"

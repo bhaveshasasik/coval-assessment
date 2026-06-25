@@ -4,6 +4,17 @@
 
 **Tech Stack:** FastAPI + Anthropic Claude (backend) | Next.js + TypeScript (frontend)
 
+## Prerequisites
+
+**System Requirements:**
+- Python 3.10+ | Node.js 18.18.0+ | npm 9.0.0+
+- [Anthropic API Key](https://console.anthropic.com/)
+
+```bash
+# Verify versions
+python3 --version && node --version && npm --version
+```
+
 ## 🚀 Quick Start
 
 ```bash

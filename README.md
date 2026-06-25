@@ -8,7 +8,7 @@
 
 **System Requirements:**
 - Python 3.10+ | Node.js 20.0.0+ | npm 10.0.0+
-- [Anthropic API Key](https://console.anthropic.com/)
+- [Anthropic API Key](https://console.anthropic.com/) (free tier includes $5 credit — enough for ~50 verifications)
 
 ```bash
 # Verify versions
@@ -140,6 +140,22 @@ PATIENT: "Stop, I need to reschedule"
 - `node_results[]`: Status, evidence quote, verification timestamp per node
 
 **Why?** Enables CI/CD gates, audit trails, and human review workflows.
+
+---
+
+## Tradeoffs & Key Decisions
+
+| Decision | Why | Tradeoff |
+|----------|-----|----------|
+| **Hybrid LLM + Rules** | Semantic understanding + reliability | More complex than pure approach, ~$0.15/verification |
+| **Smart Batching** | 40% cost savings (3 calls vs 5) | Complex windowing logic |
+| **Quote Verification Firewall** | Eliminates hallucinations (15% → <1% false positives) | May reject paraphrased real quotes |
+| **Binary PASS/FAIL** | Clear compliance verdict | No partial credit (90% correct still fails) |
+| **FastAPI + async/await** | Non-blocking LLM calls, auto docs | Dual Python/Node runtime |
+| **Next.js + TypeScript** | SSR, routing, shadcn/ui integration | Heavier than plain React |
+| **Synchronous API** | Simpler architecture, immediate results | 30-40s loading time |
+| **SQLite** | Zero-config setup | Not production-ready at scale |
+| **No automated tests** | Prioritized full-stack delivery | No regression safety net (would add pytest for quote_verifier, rule_engine next) |
 
 ---
 

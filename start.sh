@@ -31,7 +31,7 @@ if ! grep -q "ANTHROPIC_API_KEY=sk-" .env 2>/dev/null; then
 fi
 
 # Check Node.js version
-REQUIRED_NODE_VERSION="18.18.0"
+REQUIRED_NODE_VERSION="20.0.0"
 if command -v node &> /dev/null; then
     NODE_VERSION=$(node --version | sed 's/v//')
     if [ "$(printf '%s\n' "$REQUIRED_NODE_VERSION" "$NODE_VERSION" | sort -V | head -n1)" != "$REQUIRED_NODE_VERSION" ]; then

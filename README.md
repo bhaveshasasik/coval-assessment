@@ -7,7 +7,7 @@
 ## Prerequisites
 
 **System Requirements:**
-- Python 3.10+ | Node.js 18.18.0+ | npm 9.0.0+
+- Python 3.10+ | Node.js 20.0.0+ | npm 10.0.0+
 - [Anthropic API Key](https://console.anthropic.com/)
 
 ```bash

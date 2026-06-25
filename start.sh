@@ -38,7 +38,7 @@ if command -v node &> /dev/null; then
         echo -e "${RED}❌ Error: Node.js version $REQUIRED_NODE_VERSION or higher required${NC}"
         echo -e "${YELLOW}Current version: v$NODE_VERSION${NC}"
         echo -e "${YELLOW}Install Node.js from: https://nodejs.org/${NC}"
-        echo -e "${YELLOW}Or use nvm: nvm install 18.18.0${NC}"
+        echo -e "${YELLOW}Or use nvm: nvm install 20${NC}"
         exit 1
     fi
 else
